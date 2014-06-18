@@ -1,15 +1,60 @@
-## Put comments here that give an overall description of what your
-## functions do
+## makeCacheMatrix will create a matrix and other get set functions will deal with the matrix and its inverse
 
-## Write a short comment describing this function
-
-makeCacheMatrix <- function(x = matrix()) {
-
-}
+##as an example 2 by 2 square matrix with explicit values is assumed
 
 
-## Write a short comment describing this function
+makeCacheMatrix<-function()
+	{
 
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-}
+		setMatrix<-function()         # To set the square matrix
+		{
+		mat<-matrix(5:8,2,2)		# To create a 2 by 2 matrix by passing values explicitly 
+			       
+		inv<<-NULL                     # Setting the inverse of the matrix as NULL
+		}
+
+		getMatrix<-function()          # To get the matrix that was set already
+		{
+		mat                            # returning the matrix 
+		}
+
+		setInverse<-function(Inverse)  # To set the inverse of the matrix
+		{
+		inv<<-Inverse
+		}
+		getInverse<-function()         # To get the inverse of the matrix
+		{
+		inv
+		}
+	
+       		cacheSolve(list(setMatrix=setMatrix,getMatrix=getMatrix,setInverse=setInverse,getInverse=getInverse))
+		#Calling the function which caches the inverse of the matrix.This caching is to avoid unnecessary recomputation
+     }
+
+## following functions will cache the inverse of the matrix , once calculated. Then onwards only caching will be done
+## and no recomputation of inverse will be performed over again and again
+
+cacheSolve <- function(x, ...)		# Definition of the cacheSolve function
+     {
+	
+        if(!is.null(inv))		# if already 'inv' value exists return that value without computing inverse again
+	{
+	message("getting cached data")
+	message("Inverse of the Matrix as follows")
+	return(inv)		        
+	}
+	else				 # else compute the inverse of the matrix (this is time consuming for large matrices)
+	{
+	x$setMatrix()		# To set the matrix   
+	data <- x$getMatrix()		# To get the matrix into a variable 'data' 
+	inv <- solve(data)		# Finding the inverse of the matrix
+
+   
+	x$setInverse(inv)		# To set the above found inverse value of the matrix
+	inv <- x$getInverse()		# To get the inverse of the matrix into a variable 'inv' 
+	return(inv)			# Returning 'inv' for the very first time only
+	 }
+                
+     
+
+  }	
